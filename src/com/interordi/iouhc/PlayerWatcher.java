@@ -26,7 +26,7 @@ public class PlayerWatcher implements Runnable {
 	private String filePath = "plugins/IOUHC/dead.yml";
 	Map< UUID, Date > deadPlayers;
 	
-	private long respawnDelay = 5;	//In minutes
+	private long respawnDelay = 60 * 24 * 7;	//In minutes
 	
 	
 	public PlayerWatcher(IOUHC plugin) {
