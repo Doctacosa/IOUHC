@@ -1,21 +1,32 @@
 package com.interordi.iouhc;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.interordi.iouhc.DeathListener;
+import com.interordi.iouhc.PlayerWatcher;
+
 
 public class IOUHC extends JavaPlugin {
 
+	LoginListener thisLoginListener;
 	DeathListener thisDeathListener;
+	PlayerWatcher thisPlayerWatcher;
+	
 	
 	public void onEnable() {
+		thisLoginListener = new LoginListener(this);
 		thisDeathListener = new DeathListener(this);
+		thisPlayerWatcher = new PlayerWatcher(this);
 		
 		//Always ensure we've got a copy of the config in place (does not overwrite existing)
 		this.saveDefaultConfig();
 		
 		//Configuration file use (config.yml): http://wiki.bukkit.org/Configuration_API_Reference
 		thisDeathListener.setAnnounceDeaths(this.getConfig().getBoolean("announce-deaths"));
+		
+		//Check every minute for potential respawns
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, thisPlayerWatcher, 60*20L, 60*20L);
 		
 		getLogger().info("IOUHC enabled");
 	}
@@ -26,6 +37,12 @@ public class IOUHC extends JavaPlugin {
 	}
 	
 	
+	public void checkStatus(Player p) {
+		this.thisPlayerWatcher.checkStatus(p);
+	}
 
 
+	public void setDeadPlayer(Player p) {
+		thisPlayerWatcher.setDeadPlayer(p);
+	}
 }

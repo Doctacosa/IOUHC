@@ -32,6 +32,7 @@ public class DeathListener implements Listener {
 			//If we want to announce deaths, broadcast it
 			if (this.announceDeaths)
 				plugin.getLogger().info("|IOBC|Player " + p.getName() + " has been defeated!!");
+			this.plugin.setDeadPlayer(p);
 			
 			@SuppressWarnings("unused")
 			EntityDamageEvent entityDamageCause = p.getLastDamageCause();
