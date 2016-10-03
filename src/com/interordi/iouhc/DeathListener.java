@@ -1,5 +1,6 @@
 package com.interordi.iouhc;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +31,7 @@ public class DeathListener implements Listener {
 			Player p = (Player)event.getEntity();
 			
 			//If we want to announce deaths, broadcast it
-			if (this.announceDeaths)
+			if (this.announceDeaths && p.getGameMode() == GameMode.SURVIVAL)
 				plugin.getLogger().info("|IOBC|Player " + p.getName() + " has been defeated!!");
 			this.plugin.setDeadPlayer(p);
 			
