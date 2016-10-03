@@ -25,6 +25,7 @@ public class PlayerWatcher implements Runnable {
 	IOUHC plugin;
 	private String filePath = "plugins/IOUHC/dead.yml";
 	Map< UUID, Date > deadPlayers;
+	boolean announceDeaths = false;
 	
 	private long respawnDelay = 60 * 24 * 7;	//In minutes
 	
@@ -47,6 +48,8 @@ public class PlayerWatcher implements Runnable {
 		p.setGameMode(GameMode.SURVIVAL);
 		
 		p.sendMessage("You have been revived! Good luck!!");
+		if (this.announceDeaths)
+			plugin.getLogger().info("|IOBC|Player " + p.getName() + " has risen from the grave!!");
 		
 		this.deadPlayers.remove(p.getUniqueId());
 		this.saveTheDead();
@@ -148,6 +151,11 @@ public class PlayerWatcher implements Runnable {
 	}
 
 
+	public void setAnnounceDeaths(boolean value) {
+		this.announceDeaths = value;
+	}
+	
+	
 	@Override
 	public void run() {
 		//Check the status of each online player on a regular basis
