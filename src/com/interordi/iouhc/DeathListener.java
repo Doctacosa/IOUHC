@@ -30,10 +30,14 @@ public class DeathListener implements Listener {
 		if (event.getEntity() instanceof Player) {
 			Player p = (Player)event.getEntity();
 			
-			//If we want to announce deaths, broadcast it
-			if (this.announceDeaths && p.getGameMode() == GameMode.SURVIVAL)
-				plugin.getLogger().info("|IOBC|Player " + p.getName() + " has been defeated!!");
-			this.plugin.setDeadPlayer(p);
+			if (p.getGameMode() == GameMode.SURVIVAL) {
+				//If we want to announce deaths, broadcast it
+				if (this.announceDeaths)
+					plugin.getLogger().info("|IOBC|Player " + p.getName() + " has been defeated!!");
+				
+				//Set respawn timer
+				this.plugin.setDeadPlayer(p);
+			}
 			
 			@SuppressWarnings("unused")
 			EntityDamageEvent entityDamageCause = p.getLastDamageCause();
