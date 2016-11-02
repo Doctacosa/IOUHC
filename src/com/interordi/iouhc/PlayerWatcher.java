@@ -133,8 +133,57 @@ public class PlayerWatcher implements Runnable {
 		
 		if (diffInMinutes >= respawnDelay) {
 			this.respawn(p);
+		} else {
+			//Process after a delay - allows users logging in to be fully in first
+			Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(this.plugin, new Runnable() {
+				@Override
+				public void run() {
+					//Move player away
+					p.sendMessage(plugin.colorize("&cYou are still dead! You'll be able to try again in " + plugin.getPlayerRespawnDelay(p) + "!"));
+					plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "switch lobby " + p.getDisplayName());
+				}
+			}, 5*20L);
 		}
+	}
+	
+	
+	//Get the respawn date and time of the current player
+	public String getRespawnDelay(Player p) {
+		Date dateNow = new Date();
+		Date dateDeath = this.deadPlayers.get(p.getUniqueId());
+		long diffInMinutes = Math.abs(java.time.Duration.between(dateNow.toInstant(), dateDeath.toInstant()).toMinutes());
 		
+		long remainingMinutes = respawnDelay - diffInMinutes;
+		
+		String delay = "";
+		long days = 0;
+		long hours = 0;
+		long minutes = 0;
+		
+		if (remainingMinutes > 60 * 24) {
+			days = remainingMinutes / (60 * 24);
+			remainingMinutes -= days * 60 * 24;
+		}
+		if (remainingMinutes > 60) {
+			hours = remainingMinutes / 60;
+			remainingMinutes -= hours * 60;
+		}
+		minutes = remainingMinutes;
+		
+		if (days > 1)
+			delay += days + " days ";
+		else if (days == 1)
+			delay += "1 day ";
+		if (hours > 1)
+			delay += hours + " hours ";
+		else if (hours == 1)
+			delay += "1 hour ";
+		if (minutes > 1)
+			delay += minutes + " minutes ";
+		else if (minutes == 1)
+			delay += "1 minute";
+		
+		return delay;
 	}
 
 

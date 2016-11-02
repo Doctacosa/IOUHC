@@ -37,6 +37,10 @@ public class DeathListener implements Listener {
 				
 				//Set respawn timer
 				this.plugin.setDeadPlayer(p);
+				
+				//Move player away
+				p.sendMessage(this.plugin.colorize("&cYou have lost! You'll be able to try again in " + this.plugin.getPlayerRespawnDelay(p) + "!"));
+				this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), "switch lobby " + p.getDisplayName());
 			}
 			
 			@SuppressWarnings("unused")

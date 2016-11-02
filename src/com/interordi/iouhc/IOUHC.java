@@ -1,5 +1,6 @@
 package com.interordi.iouhc;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,5 +47,15 @@ public class IOUHC extends JavaPlugin {
 
 	public void setDeadPlayer(Player p) {
 		thisPlayerWatcher.setDeadPlayer(p);
+	}
+
+
+	public String getPlayerRespawnDelay(Player p) {
+		return thisPlayerWatcher.getRespawnDelay(p);
+	}
+	
+	
+	public String colorize(String s) {
+		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 }
