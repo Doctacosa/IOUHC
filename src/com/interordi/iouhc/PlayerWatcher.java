@@ -74,7 +74,8 @@ public class PlayerWatcher implements Runnable {
 		}
 		
 		if (cs.size() == 0) {
-			plugin.getLogger().info("ERROR: Death YML section not found");
+			//No deaths recorded yet, whatev'
+			//plugin.getLogger().info("ERROR: Death YML section not found");
 		}
 		
 		
