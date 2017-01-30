@@ -52,7 +52,6 @@ public class TargetsListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerPickupItemEvent(PlayerPickupItemEvent event) {
-		System.out.println("Picked up: " + event.getItem().getItemStack().getType());
 		if (event.getItem().getItemStack().getType() == Material.BLAZE_ROD) {
 			this.saveTargets(event.getPlayer(), "blaze_rod", "picked up a blaze rod");
 		}
@@ -63,8 +62,6 @@ public class TargetsListener implements Listener {
 	public void saveTargets(Player player, String target, String label) {
 		File statsFile = new File(this.filePath);
 		FileConfiguration statsAccess = YamlConfiguration.loadConfiguration(statsFile);
-		
-		System.out.println("Saving " + target + "...");
 		
 		if (!statsAccess.contains("targets"))
 			statsAccess.set("targets", "");
