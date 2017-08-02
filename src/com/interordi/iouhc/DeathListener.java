@@ -13,6 +13,7 @@ public class DeathListener implements Listener {
 	
 	IOUHC plugin;
 	boolean announceDeaths = false;
+	boolean announceRevivals = false;
 	
 	
 	public DeathListener(IOUHC plugin) {
@@ -52,8 +53,9 @@ public class DeathListener implements Listener {
 	}
 
 
-	public void setAnnounceDeaths(boolean value) {
-		this.announceDeaths = value;
+	public void setAnnounces(boolean deaths, boolean revivals) {
+		this.announceDeaths = deaths;
+		this.announceRevivals = revivals;
 	}
 	
 }

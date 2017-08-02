@@ -27,8 +27,9 @@ public class IOUHC extends JavaPlugin {
 		
 		//Configuration file use (config.yml): http://wiki.bukkit.org/Configuration_API_Reference
 		boolean announceDeaths = this.getConfig().getBoolean("announce-deaths");
-		thisDeathListener.setAnnounceDeaths(announceDeaths);
-		thisPlayerWatcher.setAnnounceDeaths(announceDeaths);
+		boolean announceRevivals = this.getConfig().getBoolean("announce-revivals");
+		thisDeathListener.setAnnounces(announceDeaths, announceRevivals);
+		thisPlayerWatcher.setAnnounces(announceDeaths, announceRevivals);
 		
 		//Check every minute for potential respawns
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, thisPlayerWatcher, 60*20L, 60*20L);
