@@ -31,7 +31,7 @@ public class TargetsListener implements Listener {
 	public void onWorldChange(PlayerChangedWorldEvent event) {
 		String worldName = event.getPlayer().getWorld().getName();
 		
-		if (worldName.equals("world_uhc_nether")) {
+		if (worldName.equals("world_challenge_nether")) {
 			this.saveTargets(event.getPlayer(), "nether", "access the Nether");
 		}
 	}
