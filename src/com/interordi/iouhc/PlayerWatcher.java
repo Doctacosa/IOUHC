@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -137,7 +138,7 @@ public class PlayerWatcher implements Runnable {
 			this.respawn(p);
 		} else {
 			//Process after a delay - allows users logging in to be fully in first
-			Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(this.plugin, new Runnable() {
+			Bukkit.getServer().getScheduler().runTaskLater(this.plugin, new Runnable() {
 				@Override
 				public void run() {
 					//Move player away

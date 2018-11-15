@@ -10,9 +10,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.*;
 
 public class TargetsListener implements Listener {
@@ -42,7 +42,7 @@ public class TargetsListener implements Listener {
 		ItemStack result = event.getRecipe().getResult();
 		Player player = (Player)event.getWhoClicked();
 		
-		if (result.getType() == Material.ENCHANTMENT_TABLE) {
+		if (result.getType() == Material.ENCHANTING_TABLE) {
 			this.saveTargets(player, "enchantment_table", "crafted an enchantment table");
 		} else if (result.getType() == Material.BOOKSHELF) {
 			this.saveTargets(player, "bookshelf", "crafted a bookshelf");
@@ -51,9 +51,14 @@ public class TargetsListener implements Listener {
 	
 	
 	@EventHandler
-	public void onPlayerPickupItemEvent(PlayerPickupItemEvent event) {
+	public void onPlayerPickupItemEvent(EntityPickupItemEvent event) {
+		if (!(event.getEntity() instanceof Player))
+			return;
+		
+		Player player = (Player)event.getEntity();
+		
 		if (event.getItem().getItemStack().getType() == Material.BLAZE_ROD) {
-			this.saveTargets(event.getPlayer(), "blaze_rod", "picked up a blaze rod");
+			this.saveTargets(player, "blaze_rod", "picked up a blaze rod");
 		}
 	}
 	
