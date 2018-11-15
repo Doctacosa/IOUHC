@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
