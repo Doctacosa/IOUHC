@@ -1,0 +1,6 @@
+name: IOUHC
+main: com.interordi.iouhc.IOUHC
+version: 0.0.1
+api-version: 1.13
+
+commands:
