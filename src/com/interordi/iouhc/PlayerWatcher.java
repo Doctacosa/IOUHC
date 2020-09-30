@@ -26,6 +26,7 @@ public class PlayerWatcher implements Runnable {
 	Map< UUID, Date > deadPlayers;
 	boolean announceDeaths = false;
 	boolean announceRevivals = false;
+	boolean banOnDeath = false;
 	
 	private long respawnDelay = 60 * 24 * 7;	//In minutes
 	
@@ -39,6 +40,9 @@ public class PlayerWatcher implements Runnable {
 	
 	//The player's cooldown is over, reset his status
 	public void respawn(Player p) {
+
+		if (!banOnDeath)
+			return;
 		
 		plugin.getLogger().info("Respawning " + p.getName());
 		World w = Bukkit.getServer().getWorlds().get(0);
@@ -126,7 +130,7 @@ public class PlayerWatcher implements Runnable {
 		Date dateDeath = this.deadPlayers.get(p.getUniqueId());
 		
 		//Not dead, exit
-		if (dateDeath == null) {
+		if (dateDeath == null || !banOnDeath) {
 			return;
 		}
 		
@@ -204,6 +208,11 @@ public class PlayerWatcher implements Runnable {
 	public void setAnnounces(boolean deaths, boolean revivals) {
 		this.announceDeaths = deaths;
 		this.announceRevivals = revivals;
+	}
+	
+
+	public void setBanOnDeath(boolean setting) {
+		this.banOnDeath = setting;
 	}
 	
 	

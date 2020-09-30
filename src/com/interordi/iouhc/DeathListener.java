@@ -14,6 +14,7 @@ public class DeathListener implements Listener {
 	IOUHC plugin;
 	boolean announceDeaths = false;
 	boolean announceRevivals = false;
+	boolean banOnDeath = false;
 	
 	
 	public DeathListener(IOUHC plugin) {
@@ -24,6 +25,10 @@ public class DeathListener implements Listener {
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
+
+		if (!banOnDeath)
+			return;
+
 		@SuppressWarnings("unused")
 		EntityType entity = event.getEntityType();
 		//this.plugin.getServer().broadcastMessage("Entity death to " + entity + " - " + event.getEntity().getName());
@@ -56,6 +61,11 @@ public class DeathListener implements Listener {
 	public void setAnnounces(boolean deaths, boolean revivals) {
 		this.announceDeaths = deaths;
 		this.announceRevivals = revivals;
+	}
+
+
+	public void setBanOnDeath(boolean setting) {
+		this.banOnDeath = setting;
 	}
 	
 }
