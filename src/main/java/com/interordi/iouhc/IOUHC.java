@@ -4,8 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.interordi.iouhc.DeathListener;
-import com.interordi.iouhc.PlayerWatcher;
 
 
 public class IOUHC extends JavaPlugin {
