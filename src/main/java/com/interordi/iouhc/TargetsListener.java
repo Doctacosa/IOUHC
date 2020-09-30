@@ -89,7 +89,7 @@ public class TargetsListener implements Listener {
 				statsAccess.set(statsTargets, targets);
 			}
 			
-			player.sendMessage("§a§lTARGET REACHED: §r§a" + label + "!");
+			player.sendMessage("Â§aÂ§lTARGET REACHED: Â§rÂ§a" + label + "!");
 		
 			try {
 				statsAccess.save(statsFile);
