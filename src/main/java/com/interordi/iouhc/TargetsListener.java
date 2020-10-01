@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -79,6 +80,21 @@ public class TargetsListener implements Listener {
 			this.saveTargets(player, targetName, "picked up a blaze rod");
 		}
 	}
+
+
+
+	@EventHandler
+	public void onEntityDeath(EntityDeathEvent event) {
+
+		String targetName = "player_kill";
+
+		if (!(event.getEntity() instanceof Player) || !(event.getEntity().getKiller() instanceof Player))
+			return;
+
+		Player player = (Player)event.getEntity().getKiller();
+		
+		this.saveTargets(player, targetName, "killed another player!");
+	}
 	
 	
 	//Update the list to the file
@@ -117,7 +133,7 @@ public class TargetsListener implements Listener {
 			}
 		}
 	}
-
+	
 
 	//Set the active targets for the current cycle
 	public void setTargets(Set<String> currentTargets) {
