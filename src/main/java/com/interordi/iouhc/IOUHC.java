@@ -1,6 +1,10 @@
 package com.interordi.iouhc;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +23,8 @@ public class IOUHC extends JavaPlugin {
 		thisDeathListener = new DeathListener(this);
 		thisPlayerWatcher = new PlayerWatcher(this);
 		thisTargets = new TargetsListener(this);
+
+		Set< String > activeTargets = new HashSet< String >();
 		
 		//Always ensure we've got a copy of the config in place (does not overwrite existing)
 		this.saveDefaultConfig();
@@ -31,6 +37,14 @@ public class IOUHC extends JavaPlugin {
 		thisPlayerWatcher.setAnnounces(announceDeaths, announceRevivals);
 		thisDeathListener.setBanOnDeath(banOnDeath);
 		thisPlayerWatcher.setBanOnDeath(banOnDeath);
+
+		ConfigurationSection targetsData = this.getConfig().getConfigurationSection("targets");
+		if (targetsData != null) {
+			activeTargets = targetsData.getKeys(false);
+		}
+
+		thisTargets.setTargets(activeTargets);
+
 		
 		//Check every minute for potential respawns
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, thisPlayerWatcher, 60*20L, 60*20L);

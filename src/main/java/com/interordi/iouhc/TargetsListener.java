@@ -2,7 +2,9 @@ package com.interordi.iouhc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,6 +21,7 @@ public class TargetsListener implements Listener {
 
 	IOUHC plugin;
 	private String filePath = "plugins/IOUHC/targets.yml";
+	private Set< String > activeTargets = new HashSet< String >();
 	
 	
 	public TargetsListener(IOUHC plugin) {
@@ -29,16 +32,26 @@ public class TargetsListener implements Listener {
 
 	@EventHandler
 	public void onWorldChange(PlayerChangedWorldEvent event) {
+		String targetName = "nether";
+
+		if (!activeTargets.contains(targetName))
+			return;
+		
 		String worldName = event.getPlayer().getWorld().getName();
 		
 		if (worldName.equals("world_challenge_nether")) {
-			this.saveTargets(event.getPlayer(), "nether", "access the Nether");
+			this.saveTargets(event.getPlayer(), targetName, "access the Nether");
 		}
 	}
 	
 	
 	@EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
+
+		if (!activeTargets.contains("enchantment_table") &&
+			!activeTargets.contains("bookshelf"))
+			return;
+		
 		ItemStack result = event.getRecipe().getResult();
 		Player player = (Player)event.getWhoClicked();
 		
@@ -55,10 +68,15 @@ public class TargetsListener implements Listener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		
+		String targetName = "blaze_rod";
+		
+		if (!activeTargets.contains(targetName))
+			return;
+		
 		Player player = (Player)event.getEntity();
 		
 		if (event.getItem().getItemStack().getType() == Material.BLAZE_ROD) {
-			this.saveTargets(player, "blaze_rod", "picked up a blaze rod");
+			this.saveTargets(player, targetName, "picked up a blaze rod");
 		}
 	}
 	
@@ -98,5 +116,11 @@ public class TargetsListener implements Listener {
 				e.printStackTrace();
 			}
 		}
+	}
+
+
+	//Set the active targets for the current cycle
+	public void setTargets(Set<String> currentTargets) {
+		this.activeTargets = currentTargets;
 	}
 }
