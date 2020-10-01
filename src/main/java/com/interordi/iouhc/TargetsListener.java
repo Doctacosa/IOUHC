@@ -15,7 +15,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.*;
 
 public class TargetsListener implements Listener {
@@ -49,10 +51,6 @@ public class TargetsListener implements Listener {
 	@EventHandler
 	public void onCraftItemEvent(CraftItemEvent event) {
 
-		if (!activeTargets.contains("enchantment_table") &&
-			!activeTargets.contains("bookshelf"))
-			return;
-		
 		ItemStack result = event.getRecipe().getResult();
 		Player player = (Player)event.getWhoClicked();
 		
@@ -60,6 +58,8 @@ public class TargetsListener implements Listener {
 			this.saveTargets(player, "enchantment_table", "crafted an enchantment table");
 		} else if (result.getType() == Material.BOOKSHELF) {
 			this.saveTargets(player, "bookshelf", "crafted a bookshelf");
+		} else if (result.getType() == Material.ENDER_CHEST) {
+			this.saveTargets(player, "enderchest", "crafted an enderchest");
 		}
 	}
 	
@@ -82,7 +82,6 @@ public class TargetsListener implements Listener {
 	}
 
 
-
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 
@@ -93,7 +92,29 @@ public class TargetsListener implements Listener {
 
 		Player player = (Player)event.getEntity().getKiller();
 		
-		this.saveTargets(player, targetName, "killed another player!");
+		this.saveTargets(player, targetName, "killed another player");
+	}
+
+
+	@EventHandler
+	public void onPlayerLevelChangeEvent(PlayerLevelChangeEvent event) {
+
+		String targetName = "level_30";
+		
+		if (event.getNewLevel() >= 30) {
+			this.saveTargets(event.getPlayer(), targetName, "got to level 30");
+		}
+	}
+
+
+	@EventHandler
+	public void onPlayerBucketEmptyEvent(PlayerBucketEmptyEvent event) {
+
+		String targetName = "bucket_lava";
+		
+		if (event.getBucket() == Material.LAVA_BUCKET) {
+			this.saveTargets(event.getPlayer(), targetName, "emptied a lava bucket");
+		}
 	}
 	
 	
