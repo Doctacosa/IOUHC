@@ -42,7 +42,7 @@ public class TargetsListener implements Listener {
 		
 		String worldName = event.getPlayer().getWorld().getName();
 		
-		if (worldName.equals("world_challenge_nether")) {
+		if (worldName.endsWith("_nether")) {
 			this.saveTargets(event.getPlayer(), targetName, "access the Nether");
 		}
 	}
