@@ -157,7 +157,11 @@ public class TargetsListener implements Listener {
 	
 
 	//Set the active targets for the current cycle
-	public void setTargets(Set<String> currentTargets) {
+	public void setTargets(Set< String > currentTargets) {
+		System.out.println("Set targets");
+		for (String target : currentTargets)
+			System.out.println("- " + target);
+			
 		this.activeTargets = currentTargets;
 	}
 }
