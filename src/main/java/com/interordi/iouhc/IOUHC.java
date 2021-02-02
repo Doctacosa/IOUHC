@@ -1,10 +1,10 @@
 package com.interordi.iouhc;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,9 +38,14 @@ public class IOUHC extends JavaPlugin {
 		thisDeathListener.setBanOnDeath(banOnDeath);
 		thisPlayerWatcher.setBanOnDeath(banOnDeath);
 
-		ConfigurationSection targetsData = this.getConfig().getConfigurationSection("targets");
-		if (targetsData != null) {
-			activeTargets = targetsData.getKeys(false);
+		List< String > targetsData = this.getConfig().getStringList("targets");
+		if (targetsData != null && !targetsData.isEmpty()) {
+			System.out.println("Loading targets...");
+			activeTargets.addAll(targetsData);
+			System.out.println(activeTargets);
+
+		} else {
+			System.out.println("ERROR: No targets found!!");
 		}
 
 		thisTargets.setTargets(activeTargets);
