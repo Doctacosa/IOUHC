@@ -6,10 +6,10 @@ Multiple challenges can be enabled or disabled at will in order to direct player
 
 ## Configuration
 
-`announce-deaths`: If player deaths should be announced
-`announce-revivals`: If player returns after the death cooldown should be announced
-`ban-on-death`: If players should be banned for a week after dying
-`targets`: The list of targets to enable and track for this UHC round
+`announce-deaths`: If player deaths should be announced  
+`announce-revivals`: If player returns after the death cooldown should be announced  
+`ban-on-death`: If players should be banned for a week after dying  
+`targets`: The list of targets to enable and track for this UHC round  
 
 
 ## Commands, permissions
