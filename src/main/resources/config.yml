@@ -1,0 +1,12 @@
+announce-deaths: true
+announce-revivals: true
+ban-on-death: true
+targets:
+- nether
+- enchantment_table
+- bookshelf
+- blaze_rod
+#- player_kill
+#- level_30
+#- bucket_lava
+#- enderchest

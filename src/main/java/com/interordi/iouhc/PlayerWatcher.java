@@ -64,6 +64,16 @@ public class PlayerWatcher implements Runnable {
 	public void loadTheDead() {
 		
 		File statsFile = new File(this.filePath);
+
+		try {
+			if (!statsFile.exists())
+				statsFile.createNewFile();
+		} catch (IOException e) {
+			System.err.println("Failed to create the deaths file");
+			e.printStackTrace();
+			return;
+		}
+
 		FileConfiguration statsAccess = YamlConfiguration.loadConfiguration(statsFile);
 		
 		ConfigurationSection deathsData = statsAccess.getConfigurationSection("deaths");

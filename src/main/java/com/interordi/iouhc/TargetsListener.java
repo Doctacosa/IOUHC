@@ -121,6 +121,16 @@ public class TargetsListener implements Listener {
 	//Update the list to the file
 	public void saveTargets(Player player, String target, String label) {
 		File statsFile = new File(this.filePath);
+
+		try {
+			if (!statsFile.exists())
+				statsFile.createNewFile();
+		} catch (IOException e) {
+			System.err.println("Failed to create the targets file");
+			e.printStackTrace();
+			return;
+		}
+
 		FileConfiguration statsAccess = YamlConfiguration.loadConfiguration(statsFile);
 		
 		if (!statsAccess.contains("targets"))
