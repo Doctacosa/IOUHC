@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
@@ -25,11 +26,29 @@ public class TargetsListener implements Listener {
 	IOUHC plugin;
 	private String filePath = "plugins/IOUHC/targets.yml";
 	private Set< String > activeTargets = new HashSet< String >();
+	private Set< Material > itemsCheck = new HashSet< Material >();
 	
 	
 	public TargetsListener(IOUHC plugin) {
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+
+		itemsCheck.add(Material.BLACK_BED);
+		itemsCheck.add(Material.BLUE_BED);
+		itemsCheck.add(Material.BROWN_BED);
+		itemsCheck.add(Material.CYAN_BED);
+		itemsCheck.add(Material.GRAY_BED);
+		itemsCheck.add(Material.GREEN_BED);
+		itemsCheck.add(Material.LIGHT_BLUE_BED);
+		itemsCheck.add(Material.LIGHT_GRAY_BED);
+		itemsCheck.add(Material.LIME_BED);
+		itemsCheck.add(Material.MAGENTA_BED);
+		itemsCheck.add(Material.ORANGE_BED);
+		itemsCheck.add(Material.PINK_BED);
+		itemsCheck.add(Material.PURPLE_BED);
+		itemsCheck.add(Material.RED_BED);
+		itemsCheck.add(Material.WHITE_BED);
+		itemsCheck.add(Material.YELLOW_BED);
 	}
 	
 
@@ -114,6 +133,20 @@ public class TargetsListener implements Listener {
 		
 		if (event.getBucket() == Material.LAVA_BUCKET) {
 			this.saveTargets(event.getPlayer(), targetName, "emptied a lava bucket");
+		}
+	}
+
+
+	@EventHandler
+	public void onBlockBreakEvent(BlockBreakEvent event) {
+
+		if (itemsCheck.contains(event.getBlock().getType())) {
+			String targetName = "item_" + event.getBlock().getType().toString().toLowerCase();
+			if (!activeTargets.contains(targetName)) {
+				return;
+			}
+
+			this.saveTargets(event.getPlayer(), targetName, "broke the right item");
 		}
 	}
 	
