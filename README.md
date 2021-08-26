@@ -1,4 +1,7 @@
 # IOUHC
+
+![Logo](https://www.interordi.com/images/plugins/iouhc-96.png)
+
 UHC (Ultra HardCore) style gameplay for a Minecraft server: enter a world set in hard mode and aim to survive while not having health regeneration through food.
 
 Multiple challenges can be enabled or disabled at will in order to direct players to complete specific tasks; each successfully completed task is logged.
