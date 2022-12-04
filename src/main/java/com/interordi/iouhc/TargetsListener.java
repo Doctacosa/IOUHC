@@ -72,12 +72,12 @@ public class TargetsListener implements Listener {
 
 		ItemStack result = event.getRecipe().getResult();
 		Player player = (Player)event.getWhoClicked();
-		
-		if (result.getType() == Material.ENCHANTING_TABLE) {
+
+		if (result.getType() == Material.ENCHANTING_TABLE && activeTargets.contains("enchantment_table")) {
 			this.saveTargets(player, "enchantment_table", "crafted an enchantment table");
-		} else if (result.getType() == Material.BOOKSHELF) {
+		} else if (result.getType() == Material.BOOKSHELF && activeTargets.contains("bookshelf")) {
 			this.saveTargets(player, "bookshelf", "crafted a bookshelf");
-		} else if (result.getType() == Material.ENDER_CHEST) {
+		} else if (result.getType() == Material.ENDER_CHEST && activeTargets.contains("enderchest")) {
 			this.saveTargets(player, "enderchest", "crafted an enderchest");
 		}
 	}
@@ -106,6 +106,9 @@ public class TargetsListener implements Listener {
 
 		String targetName = "player_kill";
 
+		if (!activeTargets.contains(targetName))
+			return;
+		
 		if (!(event.getEntity() instanceof Player) || !(event.getEntity().getKiller() instanceof Player))
 			return;
 
@@ -120,6 +123,9 @@ public class TargetsListener implements Listener {
 
 		String targetName = "level_30";
 		
+		if (!activeTargets.contains(targetName))
+			return;
+		
 		if (event.getNewLevel() >= 30) {
 			this.saveTargets(event.getPlayer(), targetName, "got to level 30");
 		}
@@ -130,6 +136,9 @@ public class TargetsListener implements Listener {
 	public void onPlayerBucketEmptyEvent(PlayerBucketEmptyEvent event) {
 
 		String targetName = "bucket_lava";
+		
+		if (!activeTargets.contains(targetName))
+			return;
 		
 		if (event.getBucket() == Material.LAVA_BUCKET) {
 			this.saveTargets(event.getPlayer(), targetName, "emptied a lava bucket");
