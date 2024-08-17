@@ -43,12 +43,10 @@ public class IOUHC extends JavaPlugin {
 
 		List< String > targetsData = this.getConfig().getStringList("targets");
 		if (targetsData != null && !targetsData.isEmpty()) {
-			System.out.println("Loading targets...");
 			activeTargets.addAll(targetsData);
-			System.out.println(activeTargets);
 
 		} else {
-			System.out.println("ERROR: No targets found!!");
+			getLogger().warning("ERROR: No targets found!!");
 		}
 
 		thisTargets.setTargets(activeTargets);

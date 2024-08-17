@@ -249,9 +249,9 @@ public class TargetsListener implements Listener {
 
 	//Set the active targets for the current cycle
 	public void setTargets(Set< String > currentTargets) {
-		System.out.println("Set targets");
+		plugin.getLogger().info("Set targets");
 		for (String target : currentTargets)
-			System.out.println("- " + target);
+			plugin.getLogger().info("- " + target);
 			
 		this.activeTargets = currentTargets;
 	}
