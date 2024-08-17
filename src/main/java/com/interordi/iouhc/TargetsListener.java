@@ -2,11 +2,15 @@ package com.interordi.iouhc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -49,6 +53,28 @@ public class TargetsListener implements Listener {
 		itemsCheck.add(Material.RED_BED);
 		itemsCheck.add(Material.WHITE_BED);
 		itemsCheck.add(Material.YELLOW_BED);
+
+		//Get current positions
+		Map< UUID, Integer > scores = new HashMap< UUID, Integer >();
+
+		FileConfiguration statsAccess = getFileConfig();
+		if (statsAccess == null)
+			return;
+
+		ConfigurationSection posData = statsAccess.getConfigurationSection("targets");
+		if (posData != null) {
+			Set< String > cs = posData.getKeys(false);
+			if (cs != null) {
+				//Loop on each player
+				for (String temp : cs) {
+					UUID uuid = UUID.fromString(temp);
+					String statsTargets = "targets." + uuid + ".targets";
+					List< String > targets = statsAccess.getStringList(statsTargets);
+					scores.put(uuid, targets.size());
+				}
+				plugin.getScores().loadScores(scores);
+			}
+		}
 	}
 	
 
@@ -155,13 +181,15 @@ public class TargetsListener implements Listener {
 				return;
 			}
 
+			event.setDropItems(false);
+
 			this.saveTargets(event.getPlayer(), targetName, "broke the right item");
 		}
 	}
-	
-	
-	//Update the list to the file
-	public void saveTargets(Player player, String target, String label) {
+
+
+	//Setup for file reading
+	public FileConfiguration getFileConfig() {
 		File statsFile = new File(this.filePath);
 
 		try {
@@ -170,10 +198,19 @@ public class TargetsListener implements Listener {
 		} catch (IOException e) {
 			System.err.println("Failed to create the targets file");
 			e.printStackTrace();
-			return;
+			return null;
 		}
 
 		FileConfiguration statsAccess = YamlConfiguration.loadConfiguration(statsFile);
+		return statsAccess;
+	}
+	
+	
+	//Update the list to the file
+	public void saveTargets(Player player, String target, String label) {
+		FileConfiguration statsAccess = getFileConfig();
+		if (statsAccess == null)
+			return;
 		
 		if (!statsAccess.contains("targets"))
 			statsAccess.set("targets", "");
@@ -197,8 +234,10 @@ public class TargetsListener implements Listener {
 			}
 			
 			player.sendMessage("§a§lTARGET REACHED: §r§a" + label + "!");
+			plugin.getScores().updateScore(player, targets.size());
 		
 			try {
+				File statsFile = new File(this.filePath);
 				statsAccess.save(statsFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

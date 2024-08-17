@@ -16,9 +16,12 @@ public class IOUHC extends JavaPlugin {
 	DeathListener thisDeathListener;
 	PlayerWatcher thisPlayerWatcher;
 	TargetsListener thisTargets;
+	Scores thisScores;
 	
 	
 	public void onEnable() {
+		thisScores = new Scores("Score");
+
 		thisLoginListener = new LoginListener(this);
 		thisDeathListener = new DeathListener(this);
 		thisPlayerWatcher = new PlayerWatcher(this);
@@ -75,6 +78,11 @@ public class IOUHC extends JavaPlugin {
 
 	public String getPlayerRespawnDelay(Player p) {
 		return thisPlayerWatcher.getRespawnDelay(p);
+	}
+	
+	
+	public Scores getScores() {
+		return thisScores;
 	}
 	
 	
