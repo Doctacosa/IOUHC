@@ -18,5 +18,12 @@ public class LoginListener implements Listener {
 	@EventHandler
 	public void onPlayerLogin(PlayerJoinEvent event) {
 		this.plugin.checkStatus(event.getPlayer());
+		plugin.getScores().refreshDisplay();
+	}
+
+
+	@EventHandler
+	public void onPlayerLogout(PlayerQuitEvent event) {
+		plugin.getScores().refreshDisplay();
 	}
 }
