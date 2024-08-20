@@ -1,4 +1,4 @@
-package com.interordi.iouhc;
+package com.interordi.iouhc.utilities;
 
 import java.util.Comparator;
 import java.util.HashMap;

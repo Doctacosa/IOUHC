@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.interordi.iouhc.utilities.Scores;
 
 
 public class IOUHC extends JavaPlugin {
