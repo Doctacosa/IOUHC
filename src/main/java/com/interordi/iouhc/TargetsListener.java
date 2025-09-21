@@ -25,6 +25,8 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.*;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class TargetsListener implements Listener {
 
 	IOUHC plugin;
@@ -217,13 +219,13 @@ public class TargetsListener implements Listener {
 		FileConfiguration statsAccess = YamlConfiguration.loadConfiguration(statsFile);
 		return statsAccess;
 	}
-	
-	
-	//Update the list to the file
-	public void saveTargets(Player player, String target, String label) {
+
+
+	//Get the list of targets completed by the player
+	public List< String > getPlayerTargets(Player player) {
 		FileConfiguration statsAccess = getFileConfig();
 		if (statsAccess == null)
-			return;
+			return null;
 		
 		if (!statsAccess.contains("targets"))
 			statsAccess.set("targets", "");
@@ -236,8 +238,18 @@ public class TargetsListener implements Listener {
 		String statsTargets = "targets." + player.getUniqueId() + ".targets";
 		
 		List< String > targets = statsAccess.getStringList(statsTargets);
+
+		return targets;
+	}
+	
+	
+	//Update the list to the file
+	public void saveTargets(Player player, String target, String label) {
+		List< String > targets = getPlayerTargets(player);
 		
 		if (targets == null || !targets.contains(target)) {
+			FileConfiguration statsAccess = getFileConfig();
+			String statsTargets = "targets." + player.getUniqueId() + ".targets";
 			
 			if (targets == null)
 				statsAccess.set(statsTargets, target);
@@ -246,6 +258,7 @@ public class TargetsListener implements Listener {
 				statsAccess.set(statsTargets, targets);
 			}
 			
+			//TODO: Avoid codes in formatting
 			player.sendMessage("§a§lTARGET REACHED: §r§a" + label + "!");
 			plugin.getScores().updateScore(player, targets.size());
 		
@@ -267,5 +280,32 @@ public class TargetsListener implements Listener {
 			plugin.getLogger().info("- " + target);
 			
 		this.activeTargets = currentTargets;
+	}
+
+
+	//Report to the player his progress
+	public void targetsOutput(Player player) {
+		List< String > completed = this.getPlayerTargets(player);
+		Set< String > targetsActive = plugin.getTargetsActive();
+		Map< String, String> targetsLabels = plugin.getTargetsLabels();
+		
+		//List completed targets
+		if (!completed.isEmpty()) {
+			player.sendMessage("" + ChatColor.BOLD + ChatColor.AQUA + "Completed targets:");
+			for (String target : completed) {
+				String label = targetsLabels.getOrDefault(target, target);
+				player.sendMessage(ChatColor.GRAY + "* " + label);
+			}
+		}
+		//List remaining targets
+		if (completed.size() != targetsActive.size()) {
+			player.sendMessage("" + ChatColor.BOLD + ChatColor.AQUA + "Remaining targets:");
+			for (String target : targetsActive) {
+				if (!completed.contains(target)) {
+					String label = targetsLabels.getOrDefault(target, target);
+					player.sendMessage(ChatColor.WHITE + "* " + label);
+				}
+			}
+		}
 	}
 }

@@ -1,13 +1,21 @@
 package com.interordi.iouhc;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.interordi.iouhc.utilities.CommandTargets;
+import com.interordi.iouhc.utilities.Commands;
 import com.interordi.iouhc.utilities.Scores;
 
 
@@ -18,6 +26,9 @@ public class IOUHC extends JavaPlugin {
 	PlayerWatcher thisPlayerWatcher;
 	TargetsListener thisTargets;
 	Scores thisScores;
+
+	private Set< String > targetsActive = new HashSet< String >();
+	private Map< String, String > targetsLabels = new HashMap< String, String >();
 	
 	
 	public void onEnable() {
@@ -28,8 +39,6 @@ public class IOUHC extends JavaPlugin {
 		thisPlayerWatcher = new PlayerWatcher(this);
 		thisTargets = new TargetsListener(this);
 
-		Set< String > activeTargets = new HashSet< String >();
-		
 		//Always ensure we've got a copy of the config in place (does not overwrite existing)
 		this.saveDefaultConfig();
 		
@@ -44,13 +53,20 @@ public class IOUHC extends JavaPlugin {
 
 		List< String > targetsData = this.getConfig().getStringList("targets");
 		if (targetsData != null && !targetsData.isEmpty()) {
-			activeTargets.addAll(targetsData);
+			targetsActive.addAll(targetsData);
 
 		} else {
 			getLogger().warning("ERROR: No targets found!!");
 		}
 
-		thisTargets.setTargets(activeTargets);
+		ConfigurationSection cfgLabels = this.getConfig().getConfigurationSection("labels");
+		if (cfgLabels != null) {
+			for (String key : cfgLabels.getKeys(false)) {
+				targetsLabels.put(key, cfgLabels.getString(key));
+			}
+		}
+
+		thisTargets.setTargets(targetsActive);
 
 		
 		//Check every minute for potential respawns
@@ -65,6 +81,49 @@ public class IOUHC extends JavaPlugin {
 	}
 	
 	
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		
+		//Get the list of potential targets if a selector was used
+		CommandTargets results = Commands.findTargets(Bukkit.getServer(), sender, cmd, label, args);
+		
+		boolean result = false;
+		if (results.position != -1) {
+			//Run the command for each target identified by the selector
+			for (String target : results.targets) {
+				args[results.position] = target;
+				
+				result = runCommand(sender, cmd, label, args);
+			}
+		} else {
+			//Run the command as-is
+			result = runCommand(sender, cmd, label, args);
+		}
+		
+		return result;
+	}
+	
+	
+	//Actually run the entered command
+	public boolean runCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		
+		if (cmd.getName().equalsIgnoreCase("target")) {
+			
+			//Only players can run this command
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(ChatColor.RED + "This command can only be run by a player.");
+				return true;
+			}
+			
+			Player player = (Player)sender;
+			thisTargets.targetsOutput(player);
+
+			return true;
+		}
+		return false;
+	}
+
+
 	public void checkStatus(Player p) {
 		this.thisPlayerWatcher.checkStatus(p);
 	}
@@ -83,8 +142,18 @@ public class IOUHC extends JavaPlugin {
 	public Scores getScores() {
 		return thisScores;
 	}
-	
-	
+
+
+	public Map< String, String > getTargetsLabels() {
+		return targetsLabels;
+	}
+
+
+	public Set< String > getTargetsActive() {
+		return targetsActive;
+	}
+
+
 	public String colorize(String s) {
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}
