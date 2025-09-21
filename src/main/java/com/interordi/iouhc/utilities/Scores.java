@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -35,6 +36,9 @@ public class Scores {
 
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		Objective objective = board.getObjective("score");
+		if (objective == null)
+			return;
+
 		board.clearSlot(DisplaySlot.SIDEBAR);
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
@@ -107,7 +111,7 @@ public class Scores {
 		scoresPlayers = scores;
 
 		//Prepare the scoreboard for later updates
-		objective = board.registerNewObjective("score", "dummy", header);
+		objective = board.registerNewObjective("score", Criteria.DUMMY, header);
 
 		refreshDisplay();
 	}
