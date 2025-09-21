@@ -54,6 +54,19 @@ public class TargetsListener implements Listener {
 		itemsCheck.add(Material.WHITE_BED);
 		itemsCheck.add(Material.YELLOW_BED);
 
+		itemsCheck.add(Material.OAK_PLANKS);
+		itemsCheck.add(Material.SPRUCE_PLANKS);
+		itemsCheck.add(Material.BIRCH_PLANKS);
+		itemsCheck.add(Material.JUNGLE_PLANKS);
+		itemsCheck.add(Material.ACACIA_PLANKS);
+		itemsCheck.add(Material.DARK_OAK_PLANKS);
+		itemsCheck.add(Material.MANGROVE_PLANKS);
+		itemsCheck.add(Material.CHERRY_PLANKS);
+		itemsCheck.add(Material.PALE_OAK_PLANKS);
+		itemsCheck.add(Material.BAMBOO_PLANKS);
+		itemsCheck.add(Material.CRIMSON_PLANKS);
+		itemsCheck.add(Material.WARPED_PLANKS);
+
 		//Get current positions
 		Map< UUID, Integer > scores = new HashMap< UUID, Integer >();
 
